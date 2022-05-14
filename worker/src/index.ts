@@ -37,7 +37,7 @@ export default {
 async function handleRequest(request: Request, env: Env) {
   const { pathname } = new URL(request.url);
 
-  let id = env.CRDT.idFromName(pathname.split("/")[1] || "A");
+  let id = env.CRDT.idFromName(pathname.split("/")[1] || "index");
   let obj = env.CRDT.get(id);
   let resp = await obj.fetch(request);
   return resp;

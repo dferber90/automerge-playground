@@ -17,3 +17,12 @@ You can open a fresh state by appending a different hash, like `/#foo` or `/#bar
 The source code is basically an extended version of this tutorial https://automerge.org/docs/tutorial/introduction/.
 
 Automerge is by Martin Kleppmann https://www.youtube.com/watch?v=UUGdMHrdzIU.
+
+
+## Developing
+
+To develop, run `yarn dev` from `app`
+- this will start serving the folder statically
+- it connects to the deployed cloudflare worker at `https://worker.dferber.workers.dev/`
+
+To reset state for a specific key, you can send `curl -X DELETE https://worker.dferber.workers.dev/foo`
