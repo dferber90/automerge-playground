@@ -21,8 +21,16 @@ Automerge is by Martin Kleppmann https://www.youtube.com/watch?v=UUGdMHrdzIU.
 
 ## Developing
 
+### `app`
+
 To develop, run `yarn dev` from `app`
 - this will start serving the folder statically
 - it connects to the deployed cloudflare worker at `https://worker.dferber.workers.dev/`
 
-To reset state for a specific key, you can send `curl -X DELETE https://worker.dferber.workers.dev/foo`
+### `worker`
+
+To develop the worker, run `yarn dev` from `worker`.
+
+But in reality, I mostly ran `yarn pub` after making changes to publish a new version of the worker and test live.
+
+To reset state for a specific key, you can send `curl -X DELETE https://worker.dferber.workers.dev/foo`.
