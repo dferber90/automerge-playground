@@ -1,37 +1,20 @@
 let docId = window.location.hash.replace(/^#/, "");
-let channel = new BroadcastChannel(docId);
-let binary = await localforage.getItem(docId);
 let doc = Automerge.init();
 
-// loadFromRemote(docId);
-
-channel.onmessage = (ev) => {
-  let newDoc = Automerge.merge(doc, Automerge.load(ev.data));
-  doc = newDoc;
-  render(newDoc);
-};
-
-if (binary) {
-  doc = Automerge.load(binary);
-  console.log(binary);
-  render(doc);
-}
+loadFromRemote(docId);
 
 let actorId = Automerge.getActorId(doc);
-console.log({ doc, actorId });
 
 function saveToRemote(docId, binary) {
-  fetch(`http://localhost:5050/${docId}`, {
+  fetch(`https://worker.dferber.workers.dev/${docId}`, {
     body: binary,
     method: "post",
-    headers: {
-      "Content-Type": "application/octet-stream",
-    },
+    headers: { "Content-Type": "application/octet-stream" },
   }).catch((err) => console.log(err));
 }
 
 async function loadFromRemote(docId) {
-  const response = await fetch(`http://localhost:5050/${docId}`);
+  const response = await fetch(`https://worker.dferber.workers.dev/${docId}`);
   if (response.status !== 200)
     throw new Error("No saved draft for doc with id=" + docId);
   const respbuffer = await response.arrayBuffer();
@@ -48,11 +31,7 @@ function updateDoc(newDoc) {
   doc = newDoc;
   render(newDoc);
   publishableBinary = Automerge.save(newDoc);
-  localforage
-    .setItem(docId, publishableBinary)
-    .catch((err) => console.log(err));
-  // channel.postMessage(publishableBinary);
-  // saveToRemote(docId, binary);
+  saveToRemote(docId, publishableBinary);
 }
 
 let incrementButton = document.getElementById("increment");
@@ -67,9 +46,9 @@ incrementButton.addEventListener("click", () => {
 
 let publishButton = document.getElementById("publish");
 
-publishButton.addEventListener("click", () => {
+publishButton.addEventListener("click", async () => {
   if (publishableBinary) {
-    channel.postMessage(publishableBinary);
+    await saveToRemote(docId, publishableBinary);
   }
   publishableBinary = null;
 });

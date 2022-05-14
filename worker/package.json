@@ -1,0 +1,23 @@
+{
+  "name": "worker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "wrangler dev",
+    "pub": "wrangler publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.10.0",
+    "typescript": "^4.6.4",
+    "wrangler": "^2.0.5"
+  },
+  "dependencies": {
+    "automerge": "^1.0.1-preview.7",
+    "itty-router": "^2.6.1"
+  }
+}

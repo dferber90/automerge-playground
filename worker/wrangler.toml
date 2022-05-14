@@ -1,0 +1,10 @@
+compatibility_date = "2022-05-14"
+main = "src/index.ts"
+name = "worker"
+
+[durable_objects]
+bindings = [{name = "CRDT", class_name = "Crdt"}]
+
+[[migrations]]
+new_classes = ["Crdt"] # Array of new classes 
+tag = "v1" # Should be unique for each entry
