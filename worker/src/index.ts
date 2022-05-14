@@ -53,7 +53,6 @@ export class Crdt {
   }
 
   // Handle HTTP requests from clients.
-  // Handle HTTP requests from clients.
   async fetch(request: Request) {
     switch (request.method) {
       case "POST": {
