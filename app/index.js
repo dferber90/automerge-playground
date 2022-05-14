@@ -27,38 +27,34 @@ async function loadFromRemote(docId) {
 }
 
 let publishableBinary;
-function updateDoc(newDoc) {
-  doc = newDoc;
-  render(newDoc);
-  publishableBinary = Automerge.save(newDoc);
-  saveToRemote(docId, publishableBinary);
-}
-
 let incrementButton = document.getElementById("increment");
 
 incrementButton.addEventListener("click", () => {
-  let newDoc = Automerge.change(doc, (doc) => {
+  doc = Automerge.change(doc, (doc) => {
     if (!doc.counter) doc.counter = new Automerge.Counter();
     doc.counter.increment();
   });
-  updateDoc(newDoc);
+  render(doc);
 });
 
-let publishButton = document.getElementById("publish");
-
-publishButton.addEventListener("click", async () => {
+document.getElementById("push").addEventListener("click", async () => {
+  publishableBinary = Automerge.save(doc);
   if (publishableBinary) {
     await saveToRemote(docId, publishableBinary);
   }
   publishableBinary = null;
 });
 
+document.getElementById("pull").addEventListener("click", async () => {
+  loadFromRemote(docId);
+});
+
 function addItem(text) {
-  let newDoc = Automerge.change(doc, (doc) => {
+  doc = Automerge.change(doc, (doc) => {
     if (!doc.items) doc.items = [];
     doc.items.push({ text, done: false });
   });
-  updateDoc(newDoc);
+  render(doc);
 }
 
 let form = document.querySelector("form");
@@ -87,9 +83,9 @@ function render(doc) {
 }
 
 function toggle(index) {
-  let newDoc = Automerge.change(doc, (doc) => {
+  doc = Automerge.change(doc, (doc) => {
     // your code here
     doc.items[index].done = !doc.items[index].done;
   });
-  updateDoc(newDoc);
+  render(doc);
 }

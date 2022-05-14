@@ -1,14 +1,28 @@
 // Worker
 import * as Automerge from "automerge";
 
-type Env = {
+interface Env {
   CRDT: DurableObjectNamespace;
-};
+}
+
+interface Doc {
+  counter?: Automerge.Counter;
+  items?: { text: string; done: boolean }[];
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "*",
 };
+
+function binaryResponse(value: Automerge.BinaryDocument) {
+  return new Response(value, {
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/octet-stream",
+    },
+  });
+}
 
 export default {
   async fetch(request: Request, env: Env) {
@@ -43,44 +57,46 @@ export class Crdt {
   async fetch(request: Request) {
     switch (request.method) {
       case "POST": {
+        let existingValue =
+          await this.state.storage.get<Automerge.BinaryDocument>("value");
+
         const content = await request.blob();
         const buffer = await content.arrayBuffer();
-        await this.state.storage.put("value", buffer);
-        return new Response("posted", { headers: corsHeaders });
+        const incomingView = new Uint8Array(buffer) as Automerge.BinaryDocument;
+
+        if (!existingValue) {
+          await this.state.storage.put("value", incomingView);
+          return new Response("created", { headers: corsHeaders });
+        }
+
+        let mergedDoc = Automerge.merge<Doc>(
+          Automerge.load(existingValue),
+          Automerge.load(incomingView)
+        );
+        const nextBuffer = Automerge.save(mergedDoc);
+        await this.state.storage.put("value", nextBuffer);
+        return new Response("updated", { headers: corsHeaders });
+      }
+      case "DELETE": {
+        await this.state.storage.delete("value");
+        return new Response("deleted", { headers: corsHeaders });
       }
       case "GET": {
         let value = await this.state.storage.get<Automerge.BinaryDocument>(
           "value"
         );
 
-        if (value) {
-          return new Response(value, {
-            headers: {
-              ...corsHeaders,
-              "Content-Type": "application/octet-stream",
-            },
-          });
-        }
+        // value exists, return it
+        if (value) return binaryResponse(value);
 
-        let doc = Automerge.init<{
-          counter?: Automerge.Counter;
-          items?: { text: string; done: boolean }[];
-        }>();
-
-        const nextDoc = Automerge.change(doc, (doc) => {
-          if (!doc.counter) doc.counter = new Automerge.Counter();
-          doc.counter.increment();
-          doc.items = [{ text: "hello from durable object", done: false }];
+        // value does not exist, create it
+        const nextDoc = Automerge.from<Doc>({
+          counter: new Automerge.Counter(),
+          items: [{ text: "hello from durable object", done: false }],
         });
-
         const publishableBinary = Automerge.save(nextDoc);
-
-        return new Response(publishableBinary, {
-          headers: {
-            ...corsHeaders,
-            "Content-Type": "application/octet-stream",
-          },
-        });
+        await this.state.storage.put("value", publishableBinary);
+        return binaryResponse(publishableBinary);
       }
       case "OPTIONS":
         return new Response(null, { headers: corsHeaders });

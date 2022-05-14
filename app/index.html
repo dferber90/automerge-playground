@@ -1,5 +1,10 @@
 <html lang="en">
   <body>
+    <h2>Changes</h2>
+    <p>All changes made are only persisted when you push them.</p>
+    <p>Pushing does not sync. You need to pull manually.</p>
+    <button type="button" id="pull">↓ pull</button>
+    <button type="button" id="push">↑ push</button>
     <h2>Todos</h2>
     <form>
       <label for="new-todo" style="display: block">Create a Todo</label>
@@ -10,7 +15,6 @@
     <h2>Counter</h2>
     <span id="count"></span>
     <button type="button" id="increment">increment</button>
-    <button type="button" id="publish">publish</button>
     <script
       type="application/javascript"
       src="https://cdn.jsdelivr.net/npm/automerge@1.0.1-preview.7/dist/automerge.min.js"
