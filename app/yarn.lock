@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@cloudflare/workers-types@^3.10.0":
+  "integrity" "sha512-gn+H5Ps9yV1VYz8FJ08bMfXLW8ubNblRF9Z+m+0ctNMyl3CdoZmUfH1pMTxYE8SMUJbLxuNvpdlZhwLDoGFXaw=="
+  "resolved" "https://registry.npmjs.org/@cloudflare/workers-types/-/workers-types-3.10.0.tgz"
+  "version" "3.10.0"
+
 "@zeit/schemas@2.6.0":
   "integrity" "sha512-uUrgZ8AxS+Lio0fZKAipJjAh415JyrOZowliZAzmnJSsf7piVL5w+G0+gFJ0KSu3QRhvui/7zuvpLz03YjXAhg=="
   "resolved" "https://registry.npmjs.org/@zeit/schemas/-/schemas-2.6.0.tgz"
@@ -934,6 +939,11 @@
   dependencies:
     "media-typer" "0.3.0"
     "mime-types" "~2.1.24"
+
+"typescript@^4.6.4":
+  "integrity" "sha512-9ia/jWHIEbo49HfjrLGfKbZSuWo9iTMwXO+Ca3pRsSpbsMbc7/IU8NKdCZVRRBafVPGnoJeFL76ZOAA84I9fEg=="
+  "resolved" "https://registry.npmjs.org/typescript/-/typescript-4.6.4.tgz"
+  "version" "4.6.4"
 
 "unpipe@~1.0.0", "unpipe@1.0.0":
   "integrity" "sha1-sr9O6FFKrmFltIF4KdIbLvSZBOw="

@@ -13,6 +13,7 @@ channel.onmessage = (ev) => {
 
 if (binary) {
   doc = Automerge.load(binary);
+  console.log(binary);
   render(doc);
 }
 
