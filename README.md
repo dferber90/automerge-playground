@@ -1,9 +1,19 @@
 # automerge-playground
 
+## About
+
 I used this to play around with [automerge](https://automerge.org/).
 
-Note that this is persisting state in the browser and is communicating between tabs using postMessage. So it does not sync outside of your browser. I did not set up a server to persist state. You can test using multiple tabs though.
+This persists state in a Durable Object using a Cloudflare Worker.
 
-The source code is basically an extended version of this tutorial https://automerge.org/docs/tutorial/introduction/
+All changes changes need to be synchronized manually using the <kbd>↑ push</kbd> and <kbd>↓ pull</kbd> buttons. These explicit syncs of state are done for demo purposes.
 
-Automerge is by Martin Kleppmann https://www.youtube.com/watch?v=UUGdMHrdzIU
+You can test using multiple tabs.
+
+You can open a fresh state by appending a different hash, like `/#foo` or `/#bar`. Each hash is its own state.
+
+## Source
+
+The source code is basically an extended version of this tutorial https://automerge.org/docs/tutorial/introduction/.
+
+Automerge is by Martin Kleppmann https://www.youtube.com/watch?v=UUGdMHrdzIU.
