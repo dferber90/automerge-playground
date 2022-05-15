@@ -6,7 +6,7 @@ loadFromRemote(docId);
 let actorId = Automerge.getActorId(doc);
 
 function saveToRemote(docId, binary) {
-  fetch(`https://worker.dferber.workers.dev/${docId}`, {
+  fetch(`https://automerge-playground.dferber.workers.dev/${docId}`, {
     body: binary,
     method: "post",
     headers: { "Content-Type": "application/octet-stream" },
@@ -14,7 +14,9 @@ function saveToRemote(docId, binary) {
 }
 
 async function loadFromRemote(docId) {
-  const response = await fetch(`https://worker.dferber.workers.dev/${docId}`);
+  const response = await fetch(
+    `https://automerge-playground.dferber.workers.dev/${docId}`
+  );
   if (response.status !== 200)
     throw new Error("No saved draft for doc with id=" + docId);
   const respbuffer = await response.arrayBuffer();
