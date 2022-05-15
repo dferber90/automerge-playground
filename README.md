@@ -34,3 +34,7 @@ To develop the worker, run `yarn dev` from `worker`.
 But in reality, I mostly ran `yarn pub` after making changes to publish a new version of the worker and test live.
 
 To reset state for a specific key, you can send `curl -X DELETE https://worker.dferber.workers.dev/foo`.
+
+## Note
+
+This implementation always sends the full document back and forth. In a real-world scenario you'd optimize the network using either of the strategies described in the [Real-time Collaboration Cookbook](https://automerge.org/docs/cookbook/real-time/).
